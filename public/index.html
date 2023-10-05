@@ -1,12 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-    <h4>Hola a todas</h4>
-</body>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Short term memory link!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Acortador de links personalizado</h1>
+        <p class="subtitle">Este sitió es tecnologia prividad para aplicaciones <strong>no es para uso público</strong></p>
+
+
+        <div class="field">
+          <label class="label">Url</label>
+          <div class="control has-icons-left has-icons-right">
+            <input id="urlInput" class="input is-success" type="text" placeholder="Escribe el url" />
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas fa-check"></i>
+            </span>
+          </div>
+          <!-- <p class="help is-success">This username is available</p> -->
+        </div>
+
+
+        <article id="response" style="display: none;" class="message is-primary">
+          <div class="message-header">
+            <p>Registro exitoso</p>
+            <button class="delete" aria-label="delete"></button>
+          </div>
+          <div id="response-message" class="message-body">
+          </div>
+        </article>
+
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button onclick="onSubmit()" class="button is-link">Registrar</button>
+          </div>
+          <div class="control">
+            <button class="button is-link is-light">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      function onSubmit(event) {
+
+        const url = document.getElementById("urlInput").value;
+        if(!url) {
+          alert("Agrega una dirección válida");
+          return console.log("url is empty");
+        }
+
+        const payload = { url: url};
+
+        const requestUrl = "/newLink";
+
+        fetch(requestUrl, {
+          method: "POST", // or 'PUT'
+          body: JSON.stringify(payload), // data can be `string` or {object}!
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .catch((error) => console.error("Error:", error))
+          .then((response) => { 
+            
+            console.log("Success:", response);
+
+            document.getElementById("response").style.display = "block";
+            document.getElementById("response-message").innerHTML = `
+            Utiliza la siguiente información: <br>
+            <br> <b> Clave Generada: </b> ${response.key}
+            <br><b> Url Original: </b> <a href=http://${response.shortUrl}> ${response.url} </a>
+            <br><b> Url Corta: </b> <a href=http://${response.shortUrl}> ${response.shortUrl} </a>
+            ` ;
+        });
+      }
+    </script>
+  </body>
 </html>

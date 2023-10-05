@@ -1,0 +1,4 @@
+// need to use the pluggin vscode mongo
+use("shortlinks")
+
+db.links.find().limit(1).sort({_id:-1});
